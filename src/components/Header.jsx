@@ -1,16 +1,27 @@
-import { AppBar, Button, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import React from "react";
+import {
+  AppBar,
+  Button,
+  IconButton,
+  Tab,
+  Tabs,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import logo from "../public/assets/logo.svg";
+import logo from "../assets/logo.svg";
 import { styled } from "@mui/material/styles";
+import { Link, useLocation } from "react-router-dom";
 
 const StyledImg = styled("img")({
   height: "7em",
 });
 
-const StyledTab = styled(Tab)(({ theme }) => ({
-  ...theme.typography.tab,
-}));
+const StyledTab = styled((props) => <Tab component={Link} {...props} />)(
+  ({ theme }) => ({
+    ...theme.typography.tab,
+  })
+);
 
 function ElevationScroll(props) {
   const trigger = useScrollTrigger({
@@ -24,17 +35,50 @@ function ElevationScroll(props) {
 }
 
 function Header() {
+  const [value, setValue] = useState(0);
+  const location = useLocation();
+  useEffect(() => {
+    switch (location.pathname) {
+      case "/":
+        setValue(0);
+        break;
+      case "/services":
+        setValue(1);
+        break;
+      case "/revolution":
+        setValue(2);
+        break;
+      case "/contect":
+        setValue(3);
+        break;
+      case "/about":
+        setValue(4);
+        break;
+      default:
+        break;
+    }
+  }, [location]);
   return (
     <ElevationScroll>
       <AppBar position="sticky">
         <Toolbar disableGutters>
-          <StyledImg alt="logo" src={logo} />
-          <Tabs sx={{ ml: "auto" }}>
-            <StyledTab label="Home" />
-            <StyledTab label="Services" />
-            <StyledTab label="The Revolution" />
-            <StyledTab label="Contect Us" />
-            <StyledTab label="About Us" />
+          <Button sx={{ m: 0, p: 0 }} component={Link} to="/" disableRipple>
+            <img alt="logo" src={logo} style={{ height: "7em" }} />
+          </Button>
+          <Tabs
+            value={value}
+            onChange={(e, v) => {
+              setValue(v);
+            }}
+            indicatorColor="primary"
+            textColor="inherit"
+            sx={{ ml: "auto" }}
+          >
+            <StyledTab label="Home" to="/" />
+            <StyledTab label="Services" to="services" />
+            <StyledTab label="The Revolution" to="/revolution" />
+            <StyledTab label="Contect Us" to="/contect" />
+            <StyledTab label="About Us" to="about" />
           </Tabs>
           <Button
             color="secondary"
