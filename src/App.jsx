@@ -13,6 +13,7 @@ function App() {
           <Routes>
             <Route path="/" element={<div>home</div>} />
             <Route path="/services" element={<div>services</div>} />
+            <Route path="/softwares" element={<div>custom softwares</div>} />
             <Route path="/mobileapps" element={<div>mobile apps</div>} />
             <Route path="/websites" element={<div>websites</div>} />
             <Route path="/revolution" element={<div>revolution</div>} />

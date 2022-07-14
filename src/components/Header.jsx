@@ -2,6 +2,8 @@ import {
   AppBar,
   Button,
   IconButton,
+  Menu,
+  MenuItem,
   Tab,
   Tabs,
   Toolbar,
@@ -23,6 +25,23 @@ const StyledTab = styled((props) => <Tab component={Link} {...props} />)(
   })
 );
 
+const StyledMenu = styled((props) => <Menu elevation={0} {...props} />)(
+  ({ theme }) => ({
+    "& .MuiPaper-root": {
+      borderRadius: 6,
+      marginTop: theme.spacing(1),
+      minWidth: 180,
+      backgroundColor: theme.palette.primary.main,
+      color: "white",
+      boxShadow:
+        "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+      "& .MuiMenu-list": {
+        padding: "4px 0",
+      },
+    },
+  })
+);
+
 function ElevationScroll(props) {
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -34,8 +53,15 @@ function ElevationScroll(props) {
   });
 }
 
+const menuOption = [
+  { name: "Custom Softwares", route: "/softwares" },
+  { name: "App Devlopment", route: "/mobileapps" },
+  { name: "Web Development", route: "/websites" },
+];
+
 function Header() {
   const [value, setValue] = useState(0);
+  const [el, setEl] = useState(null);
   const location = useLocation();
   useEffect(() => {
     switch (location.pathname) {
@@ -58,6 +84,15 @@ function Header() {
         break;
     }
   }, [location]);
+
+  const handleOpen = (e) => {
+    setEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setEl(null);
+  };
+
   return (
     <ElevationScroll>
       <AppBar position="sticky">
@@ -75,7 +110,11 @@ function Header() {
             sx={{ ml: "auto" }}
           >
             <StyledTab label="Home" to="/" />
-            <StyledTab label="Services" to="services" />
+            <StyledTab
+              label="Services"
+              to="services"
+              onMouseOver={(e) => handleOpen(e)}
+            />
             <StyledTab label="The Revolution" to="/revolution" />
             <StyledTab label="Contect Us" to="/contect" />
             <StyledTab label="About Us" to="about" />
@@ -92,6 +131,43 @@ function Header() {
             Free Estimate
           </Button>
         </Toolbar>
+        <StyledMenu
+          anchorEl={el}
+          open={Boolean(el)}
+          onClose={handleClose}
+          MenuListProps={{ onMouseLeave: handleClose }}
+        >
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setValue(1);
+            }}
+            component={Link}
+            to="/softwares"
+          >
+            Custom Software
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setValue(1);
+            }}
+            component={Link}
+            to="/mobileapps"
+          >
+            App Devlopment
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setValue(1);
+            }}
+            component={Link}
+            to="/websites"
+          >
+            Web devlopment
+          </MenuItem>
+        </StyledMenu>
       </AppBar>
     </ElevationScroll>
   );
